@@ -14,9 +14,11 @@
       - boto3
       - botocore
       executable: pip
+  - name: install additional dependencies for ansible which runs in venv
+      run: |
+        source /opt/pipx/venvs/ansible-core/bin/activate
+        python -m pip install boto3
   - name: Launch EC2 Instance
-    vars:
-      ansible_python_interpreter: /usr/bin/python
     ec2_instance:
       instance_type: t2.large
       image_id: ami-0bb84b8ffd87024d8
