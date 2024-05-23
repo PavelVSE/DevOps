@@ -1,4 +1,4 @@
-name: deploy-eshop
+name: Deploy Eshop
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
 
 jobs:
   deploy-eshop:
-    name: Deploy Eshop
+    name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to EC2
-        uses: ./.github/actions/launch_ec2_instance.yml
+        uses: ./.github/actions
