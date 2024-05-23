@@ -17,10 +17,6 @@ jobs:
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
-        env:
-          access_key: ${{ secrets.ACCESS_KEY }}
-          secret_key: ${{ secrets.SECRET_KEY }}
-          session_token: ${{ secrets.SESSION_TOKEN }}
         with:
           # Required, playbook filepath
           playbook: ansible/ec2_deploy.yml
@@ -28,3 +24,8 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           # Optional, encrypted vault password
           vault_password: ${{secrets.VAULT_PASSWORD}}
+          # Optional, additional flags to pass to ansible-playbook
+          options: |
+            --extra-vars access_key=${{ secrets.ACCESS_KEY }}
+            --extra-vars secret_key=${{ secrets.SECRET_KEY }}
+            --extra-vars session_token=${{ secrets.SESSION_TOKEN }}
