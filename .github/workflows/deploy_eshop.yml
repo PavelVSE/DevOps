@@ -3,8 +3,7 @@ name: Deploy eshop
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
+
 
 jobs:
   Deploy:
@@ -20,6 +19,6 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           # Required, playbook filepath
-          playbook: ././ansible/launch_ec2_instance.yml
+          playbook: ../../ansible/launch_ec2_instance.yml
 
 
