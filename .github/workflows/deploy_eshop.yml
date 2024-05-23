@@ -14,6 +14,10 @@ jobs:
         with:
           python-version: '3.9'
       - uses: insightsengineering/pip-action@v2
+        with:
+          packages: |
+            boto
+            boto3
       - run: pip install boto boto3
 
       - name: Cache pip modules
