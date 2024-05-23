@@ -17,16 +17,6 @@ jobs:
             boto
             boto3
 
-  Deploy:
-    needs: Install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@v4.1.1
-        with:
-          token: ${{ secrets.WORKFLOW_TOKEN }}
-
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
