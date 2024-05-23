@@ -6,7 +6,7 @@
   - name: Install Python and pip
     yum:
       name: "{{ item }}"
-      use_backend: yum
+      use_backend: dnf
       state: present
     become: true
     loop:
