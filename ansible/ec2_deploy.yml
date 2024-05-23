@@ -13,7 +13,7 @@
       name:
       - boto3
       - botocore
-      executable: pip-3.7
+      executable: pip
   - name: Launch EC2 Instance
     ec2_instance:
       instance_type: t2.large
