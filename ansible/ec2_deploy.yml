@@ -4,9 +4,9 @@
 
   tasks:
   - name: Install Python and pip
-    use_backend: yum
     yum:
       name: "{{ item }}"
+      use_backend: yum
       state: present
     become: true
     loop:
