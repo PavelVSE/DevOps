@@ -1,15 +1,14 @@
-- name: Install boto3 and botocore with pip3 module
-    pip:
-      name:
-      - boto3
-      - botocore
-      executable: pip-3.7
-
 - name: Deploy to EC2
   hosts: localhost
   connection: local
 
   tasks:
+  - name: Install boto3 and botocore with pip3 module
+    pip:
+      name:
+      - boto3
+      - botocore
+      executable: pip-3.7
   - name: Launch EC2 Instance
     ec2_instance:
       instance_type: t2.large
