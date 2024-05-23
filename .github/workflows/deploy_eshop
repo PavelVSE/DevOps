@@ -1,0 +1,14 @@
+name: deploy-eshop
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-eshop:
+    name: Deploy Eshop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: ./.github/actions/launch_ec2_instance.yml
