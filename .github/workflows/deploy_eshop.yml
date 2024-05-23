@@ -1,4 +1,4 @@
-name: Deploy Eshop
+name: Deploy eshop
 
 on:
   workflow_dispatch:
@@ -17,4 +17,4 @@ jobs:
           token: ${{ secrets.WORKFLOW_TOKEN }}
 
       - name: Deploy to EC2
-        uses: ./.github/actions
+        uses: ./actions
