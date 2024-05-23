@@ -16,7 +16,6 @@ jobs:
           packages: |
             boto
             boto3
-      - run: python main.py
 
   Deploy:
     needs: Install
