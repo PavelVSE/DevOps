@@ -1,8 +1,3 @@
-- name: install additional dependencies for ansible which runs in venv
-    run: |
-      source /opt/pipx/venvs/ansible-core/bin/activate
-      python -m pip install boto3
-
 - name: Deploy to EC2
   hosts: localhost
   connection: local

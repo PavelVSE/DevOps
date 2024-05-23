@@ -20,6 +20,11 @@ jobs:
             boto3
       - run: pip install boto boto3
 
+      - name: install additional dependencies for ansible which runs in venv
+        run: |
+          source /opt/pipx/venvs/ansible-core/bin/activate
+          python -m pip install boto3
+
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
