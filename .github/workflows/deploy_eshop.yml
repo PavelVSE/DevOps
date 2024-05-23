@@ -16,6 +16,7 @@ jobs:
           packages: |
             boto
             boto3
+      - run: pip install boto boto3
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
