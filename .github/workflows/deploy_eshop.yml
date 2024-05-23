@@ -20,13 +20,6 @@ jobs:
             boto3
       - run: pip install boto boto3
 
-      - name: Cache pip modules
-        uses: actions/cache@v3.3.2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: node_modules-
-
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
