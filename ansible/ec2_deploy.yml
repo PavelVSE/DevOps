@@ -1,3 +1,8 @@
+- name: install additional dependencies for ansible which runs in venv
+    run: |
+      source /opt/pipx/venvs/ansible-core/bin/activate
+      python -m pip install boto3
+
 - name: Deploy to EC2
   hosts: localhost
   connection: local
@@ -14,10 +19,7 @@
       - boto3
       - botocore
       executable: pip
-  - name: install additional dependencies for ansible which runs in venv
-      run: |
-        source /opt/pipx/venvs/ansible-core/bin/activate
-        python -m pip install boto3
+
   - name: Launch EC2 Instance
     ec2_instance:
       instance_type: t2.large
