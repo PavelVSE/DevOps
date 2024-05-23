@@ -4,16 +4,26 @@ on:
   workflow_dispatch:
   push:
 
-
 jobs:
-  Deploy:
+  Install:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Code checkout
-        uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          token: ${{ secrets.WORKFLOW_TOKEN }}
+          python-version: '3.9'
+      - uses: insightsengineering/pip-action@v2
+        with:
+          packages: |
+            boto
+            boto3
+      - run: pip install boto boto3
+
+      - name: install additional dependencies for ansible which runs in venv
+        run: |
+          source /opt/pipx/venvs/ansible-core/bin/activate
+          python -m pip install boto3
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
@@ -24,3 +34,8 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           # Optional, encrypted vault password
           vault_password: ${{secrets.VAULT_PASSWORD}}
+          # Optional, additional flags to pass to ansible-playbook
+          options: |
+            --extra-vars access_key=${{ secrets.ACCESS_KEY }}
+            --extra-vars secret_key=${{ secrets.SECRET_KEY }}
+            --extra-vars session_token=${{ secrets.SESSION_TOKEN }}
