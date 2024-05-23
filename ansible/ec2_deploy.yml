@@ -6,7 +6,7 @@
   - name: Install the latest version of pip3
     ansible.builtin.package:
       name:
-        - pip3
+        - pip
       state: latest
   - name: Install boto3 and botocore with pip3 module
     pip:
