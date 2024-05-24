@@ -49,7 +49,7 @@
 
 - name: Configure EC2 instances
   hosts: launched
-  connection: ssh
+  connection: local
   become: yes
 
   tasks:
