@@ -41,6 +41,8 @@
       groupname: all
     loop: "{{ ec2_instance_result.instances }}"
 
+- name: Refresh inventory to ensure new instances exist in inventory
+  meta: refresh_inventory
 
 - name: Configure EC2 instances
   hosts: launched
