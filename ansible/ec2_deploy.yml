@@ -54,6 +54,7 @@
 
   tasks:
   - name: Install Git and Docker
+    use_backend: yum3
     yum:
       name:
         - git
