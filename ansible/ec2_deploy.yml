@@ -48,7 +48,7 @@
     loop: "{{ ec2_instance_result.instances }}"
 
 - name: Configure EC2 instances
-  hosts: launched
+  hosts: all:launched:!later
   connection: ssh
   become: yes
 
@@ -92,3 +92,8 @@
       port:
         80
 
+  - name: Remove from launched
+    add_host:
+      hostname: "{{ item.public_ip_address }}"
+      groupname: later
+    loop: "{{ ec2_instance_result.instances }}"
