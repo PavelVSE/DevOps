@@ -1,3 +1,11 @@
+- name: Install community.aws collection
+  hosts: localhost
+  tasks:
+    - name: Install community.aws collection
+      command: ansible-galaxy collection install community.aws
+      become: yes
+      become_user: root
+
 - name: Terminate old instances
   hosts: localhost
   tasks:
