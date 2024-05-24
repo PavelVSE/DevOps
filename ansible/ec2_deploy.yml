@@ -1,6 +1,3 @@
-[launched:vars]
-ansible_ssh_common_args="-o StrictHostKeyChecking=no"
-
 - name: Deploy to EC2
   hosts: localhost
   connection: local
