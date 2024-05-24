@@ -1,3 +1,11 @@
+- name: Terminate old instances
+  hosts: localhost
+  tasks:
+    - name: Terminate instances that were previously launched
+      ec2:
+        state: 'absent'
+    loop: "{{ ec2_instance_result.instances }}"
+
 - name: Deploy to EC2
   hosts: localhost
   connection: local
@@ -28,6 +36,12 @@
       groupname: launched
     loop: "{{ ec2_instance_result.instances }}"
 
+  - name: Add instance host to group
+    add_host:
+      hostname: "{{ item.public_ip_address }}"
+      groupname: old
+    loop: "{{ ec2_instance_result.instances }}"
+
   - name: Wait for SSH connection
     delegate_to: "{{ item.public_dns_name }}"
     wait_for_connection:
@@ -35,12 +49,16 @@
       timeout: 300
     loop: "{{ ec2_instance_result.instances }}"
 
+  - name: Refresh inventory to ensure new instances exist in inventory
+    meta: refresh_inventory
+
 - name: Configure EC2 instances
   hosts: launched
-  vars:
-    ansible_ssh_private_key_file: ../test.pem
   connection: ssh
   become: yes
+  vars:
+    ansible_ssh_private_key_file: key
+    ansible_user: ec2-user
 
   tasks:
   - name: Install Git and Docker
@@ -50,12 +68,13 @@
         - docker
       state: latest
       update_cache: yes
-  - service:
+  - name: Start Docker service
+    service:
       name: docker
       state: started
       enabled: yes
   - name: Set proper rights to Docker services
-    shell: usermod -a -G docker ec2-user
+    shell: usermod -a -G docker {{ ansible_user }}
 
   - name: Fetch eshop from Git
     git:
@@ -79,5 +98,4 @@
 
   - name: Wait for eshop to run
     wait_for:
-      port:
-        80
+      port: 80

@@ -3,9 +3,11 @@ name: Deploy eshop
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
 
 jobs:
-  Install:
+  Deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,18 +27,19 @@ jobs:
           source /opt/pipx/venvs/ansible-core/bin/activate
           python -m pip install boto3
 
+      - name: Prepare SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
+        shell: bash
+
+      - name: Set SSH key permissions
+        run: chmod 600 key
+
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          # Required, playbook filepath
           playbook: ansible/ec2_deploy.yml
-          # Optional, SSH private key
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          # Optional, encrypted vault password
-          vault_password: ${{secrets.VAULT_PASSWORD}}
-          # Optional, additional flags to pass to ansible-playbook
+          vault_password: ${{ secrets.VAULT_PASSWORD }}
           options: |
             --extra-vars access_key=${{ secrets.ACCESS_KEY }}
             --extra-vars secret_key=${{ secrets.SECRET_KEY }}
             --extra-vars session_token=${{ secrets.SESSION_TOKEN }}
-
