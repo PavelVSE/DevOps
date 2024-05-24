@@ -10,19 +10,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - uses: insightsengineering/pip-action@v2
-        with:
-          packages: |
-            boto
-            boto3
-      - run: pip install boto boto3
-
-      - name: install additional dependencies for ansible which runs in venv
+      - name: Install Python dependencies
         run: |
-          python -m pip install boto3 botocore
+          pip install boto boto3 ansible
+      - name: Install Ansible and dependencies
+        run: python -m pip install ansible boto3 botocore
 
       - name: prepare SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
@@ -39,7 +35,6 @@ jobs:
             [defaults]
             host_key_checking = False
             ansible_python_interpreter = /usr/bin/python3
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: |
             [localhost]
             127.0.0.1 ansible_connection=local
