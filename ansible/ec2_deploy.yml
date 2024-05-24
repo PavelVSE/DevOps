@@ -35,12 +35,8 @@
       timeout: 300
     loop: "{{ ec2_instance_result.instances }}"
 
-  - name: Strict removal
-    ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
-    loop: "{{ ec2_instance_result.instances }}"
-
 - name: Configure EC2 instances
-  hosts: launched
+  hosts: localhost
   connection: ssh
   become: yes
 
