@@ -22,8 +22,7 @@ jobs:
 
       - name: install additional dependencies for ansible which runs in venv
         run: |
-          source /opt/pipx/venvs/ansible-core/bin/activate
-          python -m pip install boto3
+          python -m pip install boto3 botocore
 
       - name: prepare SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
@@ -35,20 +34,16 @@ jobs:
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          # Required, playbook filepath
           playbook: ansible/ec2_deploy.yml
-          # Optional, ansible configuration file content (ansible.cfg)
           configuration: |
             [defaults]
             host_key_checking = False
-          # Optional, SSH private key
+            ansible_python_interpreter = /usr/bin/python3
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # Optional, literal inventory file contents
           inventory: |
             [localhost]
             127.0.0.1 ansible_connection=local
           vault_password: ${{ secrets.VAULT_PASSWORD }}
-          # Optional, additional flags to pass to ansible-playbook
           options: |
             --extra-vars access_key=${{ secrets.ACCESS_KEY }}
             --extra-vars secret_key=${{ secrets.SECRET_KEY }}
