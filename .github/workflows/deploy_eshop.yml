@@ -39,7 +39,6 @@ jobs:
           configuration: |
             [defaults]
             host_key_checking = False
-            ansible_python_interpreter = /usr/bin/python3
           inventory: |
             [localhost]
             127.0.0.1 ansible_connection=local
