@@ -40,6 +40,7 @@
   remote_user: ec2-user
   connection: ssh
   become: yes
+  become_user: ec2-user
 
   tasks:
   - name: Install Git and Docker
