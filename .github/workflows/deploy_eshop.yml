@@ -30,8 +30,7 @@ jobs:
         with:
           # Required, playbook filepath
           playbook: ansible/ec2_deploy.yml
-          # Optional, SSH private key
-          key: ${{secrets.SSH_PRIVATE_KEY}}
+
           # Optional, encrypted vault password
           vault_password: ${{secrets.VAULT_PASSWORD}}
           # Optional, additional flags to pass to ansible-playbook
