@@ -34,7 +34,7 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           # Optional, literal inventory file contents
           inventory: |
-            [launched:vars]
+            [all:vars]
             ansible_ssh_common_args="-o StrictHostKeyChecking=no"
           # Optional, encrypted vault password
           vault_password: ${{secrets.VAULT_PASSWORD}}
