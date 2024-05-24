@@ -3,18 +3,6 @@
   connection: local
 
   tasks:
-  - name: Install the latest version of pip3
-    ansible.builtin.package:
-      name:
-        - pip
-      state: latest
-  - name: Install boto3 and botocore with pip3 module
-    pip:
-      name:
-      - boto3
-      - botocore
-      executable: pip
-
   - name: Launch EC2 Instance
     ec2_instance:
       instance_type: t2.large
@@ -49,7 +37,7 @@
 
 - name: Configure EC2 instances
   hosts: launched
-  connection: local
+  connection: ssh
   become: yes
 
   tasks:
