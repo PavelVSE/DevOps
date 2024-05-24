@@ -1,65 +1,63 @@
-- name: Install community.aws collection
-  hosts: localhost
-  tasks:
-    - name: Install community.aws collection
-      command: ansible-galaxy collection install community.aws
-      become: yes
-      become_user: root
-
-- name: Terminate old instances
-  hosts: localhost
-  tasks:
-    - name: Terminate instances that were previously launched
-      ec2:
-        instance_ids: "{{ item.instance_id }}"
-        state: absent
-      loop: "{{ ec2_instance_result.instances }}"
-
 - name: Deploy to EC2
   hosts: localhost
   connection: local
 
   tasks:
-  - name: Launch EC2 Instance
-    ec2_instance:
-      instance_type: t2.large
-      image_id: ami-0bb84b8ffd87024d8
-      region: us-east-1
-      key_name: test
-      vpc_subnet_id: subnet-098921a6beb82b5a4
-      tags:
-        Name: Eshop instance
-      network:
+    - name: Describe EC2 instances
+      ec2_instance_info:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        aws_security_token: "{{ session_token }}"
+        region: us-east-1
+        filters:
+          "tag:Name": "Eshop instance"
+          instance-state-name: [ "running", "pending" ]
+      register: ec2_instances_info
+
+    - name: Terminate old instances
+      ec2_instance:
+        instance_ids: "{{ item.id }}"
+        state: absent
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        aws_security_token: "{{ session_token }}"
+      loop: "{{ ec2_instances_info.instances }}"
+      when: ec2_instances_info.instances | length > 1
+
+    - name: Launch EC2 Instance
+      ec2_instance:
+        instance_type: t2.large
+        image_id: ami-0bb84b8ffd87024d8
+        region: us-east-1
+        key_name: test
+        vpc_subnet_id: subnet-098921a6beb82b5a4
+        tags:
+          Name: Eshop instance
+        network:
           assign_public_ip: yes
-      wait: yes
-      count: 1
-      security_group: eshop
-      aws_access_key: "{{ access_key }}"
-      aws_secret_key: "{{ secret_key }}"
-      security_token: "{{ session_token }}"
-    register: ec2_instance_result
+        wait: yes
+        count: 1
+        security_group: eshop
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        security_token: "{{ session_token }}"
+      register: ec2_instance_result
 
-  - name: Add instance host to group
-    add_host:
-      hostname: "{{ item.public_ip_address }}"
-      groupname: launched
-    loop: "{{ ec2_instance_result.instances }}"
+    - name: Add instance host to group
+      add_host:
+        hostname: "{{ item.public_ip_address }}"
+        groupname: launched
+      loop: "{{ ec2_instance_result.instances }}"
 
-  - name: Add instance host to group
-    add_host:
-      hostname: "{{ item.public_ip_address }}"
-      groupname: old
-    loop: "{{ ec2_instance_result.instances }}"
+    - name: Wait for SSH connection
+      delegate_to: "{{ item.public_dns_name }}"
+      wait_for_connection:
+        delay: 30
+        timeout: 300
+      loop: "{{ ec2_instance_result.instances }}"
 
-  - name: Wait for SSH connection
-    delegate_to: "{{ item.public_dns_name }}"
-    wait_for_connection:
-      delay: 30
-      timeout: 300
-    loop: "{{ ec2_instance_result.instances }}"
-
-  - name: Refresh inventory to ensure new instances exist in inventory
-    meta: refresh_inventory
+    - name: Refresh inventory to ensure new instance exists in inventory
+      meta: refresh_inventory
 
 - name: Configure EC2 instances
   hosts: launched
