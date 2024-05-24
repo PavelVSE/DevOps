@@ -39,3 +39,4 @@ jobs:
             --extra-vars access_key=${{ secrets.ACCESS_KEY }}
             --extra-vars secret_key=${{ secrets.SECRET_KEY }}
             --extra-vars session_token=${{ secrets.SESSION_TOKEN }}
+
