@@ -35,12 +35,6 @@
       timeout: 300
     loop: "{{ ec2_instance_result.instances }}"
 
-  - name: Add instance host to group
-    add_host:
-      hostname: "{{ item.public_ip_address }}"
-      groupname: all
-    loop: "{{ ec2_instance_result.instances }}"
-
   - name: Refresh inventory to ensure new instances exist in inventory
     meta: refresh_inventory
 

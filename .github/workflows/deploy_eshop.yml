@@ -30,11 +30,15 @@ jobs:
         with:
           # Required, playbook filepath
           playbook: ansible/ec2_deploy.yml
+          # Optional, ansible configuration file content (ansible.cfg)
+          configuration: |
+            [defaults]
+            host_key_checking = False
           # Optional, SSH private key
           key: ${{secrets.SSH_PRIVATE_KEY}}
           # Optional, literal inventory file contents
           inventory: |
-            [all:vars]
+            [launched:vars]
             ansible_ssh_common_args="-o StrictHostKeyChecking=no"
           # Optional, encrypted vault password
           vault_password: ${{secrets.VAULT_PASSWORD}}
