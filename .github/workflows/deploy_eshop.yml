@@ -3,9 +3,11 @@ name: Deploy eshop
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
 
 jobs:
-  Install:
+  Deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,10 +38,6 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: ansible/ec2_deploy.yml
-          configuration: |
-            [defaults]
-            host_key_checking = False
-
           vault_password: ${{ secrets.VAULT_PASSWORD }}
           options: |
             --extra-vars access_key=${{ secrets.ACCESS_KEY }}

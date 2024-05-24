@@ -1,3 +1,11 @@
+- name: Terminate old instances
+  hosts: localhost
+  tasks:
+    - name: Terminate instances that were previously launched
+      ec2:
+        state: 'absent'
+    loop: "{{ ec2_instance_result.instances }}"
+
 - name: Deploy to EC2
   hosts: localhost
   connection: local
@@ -28,6 +36,12 @@
       groupname: launched
     loop: "{{ ec2_instance_result.instances }}"
 
+  - name: Add instance host to group
+    add_host:
+      hostname: "{{ item.public_ip_address }}"
+      groupname: old
+    loop: "{{ ec2_instance_result.instances }}"
+
   - name: Wait for SSH connection
     delegate_to: "{{ item.public_dns_name }}"
     wait_for_connection:
@@ -44,7 +58,7 @@
   become: yes
   vars:
     ansible_ssh_private_key_file: key
-    ansible_user: ec2-user  # or ec2-user, depending on your AMI
+    ansible_user: ec2-user
 
   tasks:
   - name: Install Git and Docker
