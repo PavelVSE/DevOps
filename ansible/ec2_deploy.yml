@@ -35,10 +35,12 @@
       timeout: 300
     loop: "{{ ec2_instance_result.instances }}"
 
+  - name: Strict removal
+    ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+    loop: "{{ ec2_instance_result.instances }}"
+
 - name: Configure EC2 instances
   hosts: launched
-  ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
-  remote_user: ec2-user
   connection: ssh
   become: yes
 
