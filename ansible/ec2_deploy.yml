@@ -3,8 +3,9 @@
   tasks:
     - name: Terminate instances that were previously launched
       ec2:
-        state: 'absent'
-    loop: "{{ ec2_instance_result.instances }}"
+        instance_ids: "{{ item.instance_id }}"
+        state: absent
+      loop: "{{ ec2_instance_result.instances }}"
 
 - name: Deploy to EC2
   hosts: localhost
