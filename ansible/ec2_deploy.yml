@@ -51,10 +51,10 @@
   hosts: launched
   connection: local
   become: yes
+  use_backend: yum3
 
   tasks:
   - name: Install Git and Docker
-    use_backend: yum3
     yum:
       name:
         - git
