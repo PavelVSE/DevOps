@@ -20,10 +20,10 @@
         state: absent
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
-        aws_security_token: "{{ session_token }}"
+        security_token: "{{ session_token }}"
         region: us-east-1
       loop: "{{ ec2_instances_info.instances }}"
-      when: ec2_instances_info.instances | length > 1
+      when: ec2_instances_info.instances | length > 0
 
     - name: Launch EC2 Instance
       ec2_instance:
