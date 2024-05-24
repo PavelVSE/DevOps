@@ -16,7 +16,7 @@
 
     - name: Terminate old instances
       ec2_instance:
-        instance_ids: "{{ item.id }}"
+        instance_ids: "{{ item.instance_id }}"
         state: absent
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
